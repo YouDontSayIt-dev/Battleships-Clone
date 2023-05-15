@@ -18,14 +18,14 @@ RED = (255, 0, 0)
 
 # Set the size of the grids
 GRID_SIZE = 10
+ATTACK_SIZE = 20
 CELL_SIZE = WINDOW_HEIGHT // GRID_SIZE
 
 # Set the gap between the grids
 GAP = 40
 
 # Set the number of battleships
-NUM_SHIPS = 5
-SHIP_LENGTHS = [5, 4, 3, 3, 2]
+SHIP_LENGTHS = [2]
 
 # Create the window
 window = pygame.display.set_mode(WINDOW_SIZE)
@@ -110,14 +110,18 @@ while running:
             clicked_row = mouse_pos[1] // CELL_SIZE
             clicked_col = mouse_pos[0] // CELL_SIZE
 
-            if clicked_row >= 0 and clicked_row < GRID_SIZE and clicked_col >= 0 and clicked_col < GRID_SIZE:
+            if clicked_row >= 0 and clicked_row < ATTACK_SIZE and clicked_col >= 0 and clicked_col < ATTACK_SIZE:
                 if turn == 1:
+                    turn_label = font.render("PLAYER 1 TURN", True, WHITE)
+                    print(clicked_row, clicked_col)
+                    clicked_col -= ATTACK_SIZE
                     result = check_hit(clicked_row, clicked_col, player2_grid)
                     if result == "HIT":
                         if check_game_over(player2_grid):
                             game_over = True
                     turn = 2
                 elif turn == 2:
+                    turn_label = font.render("PLAYER 2 TURN", True, WHITE)
                     result = check_hit(clicked_row, clicked_col, player1_grid)
                     if result == "HIT":
                         if check_game_over(player1_grid):
