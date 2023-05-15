@@ -24,7 +24,8 @@ CELL_SIZE = WINDOW_HEIGHT // GRID_SIZE
 GAP = 40
 
 # Set the number of battleships
-NUM_BATTLESHIPS = 1
+NUM_SHIPS = 5
+SHIP_LENGTHS = [5, 4, 3, 3, 2]
 
 # Create the window
 window = pygame.display.set_mode(WINDOW_SIZE)
@@ -35,15 +36,25 @@ player1_grid = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]
 player2_grid = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]
 
 # Place battleships randomly on the grids
-def place_battleships(grid):
-    count = 0
-    while count < NUM_BATTLESHIPS:
-        row = random.randint(0, GRID_SIZE - 1)
-        col = random.randint(0, GRID_SIZE - 1)
-        if grid[row][col] == 0:
-            grid[row][col] = 4  # Set player's battleship value to 4
-            count += 1
-
+def place_ships(grid, ship_lengths):
+    for length in ship_lengths:
+        placed = False
+        while not placed:
+            orientation = random.randint(0, 1)  # 0 for horizontal, 1 for vertical
+            if orientation == 0:
+                row = random.randint(0, GRID_SIZE - 1)
+                col = random.randint(0, GRID_SIZE - length)
+                if all(grid[row][col+i] == 0 for i in range(length)):
+                    for i in range(length):
+                        grid[row][col+i] = 4  # Set player's battleship value to 4
+                    placed = True
+            else:
+                row = random.randint(0, GRID_SIZE - length)
+                col = random.randint(0, GRID_SIZE - 1)
+                if all(grid[row+i][col] == 0 for i in range(length)):
+                    for i in range(length):
+                        grid[row+i][col] = 4  # Set player's battleship value to 4
+                    placed = True
 
 # Draw the grid
 def draw_grid(x_offset, y_offset, grid):
@@ -65,14 +76,14 @@ def draw_grid(x_offset, y_offset, grid):
 # Check if a coordinate is a hit or miss
 def check_hit(row, col, target_grid):
     if target_grid[row][col] == 4:  # Check if the player's battleship is hit
-        target_grid[row][col] = 2
-        return "HIT"
+                target_grid[row][col] = 2
+                return "HIT"
     else:
         target_grid[row][col] = 3
         return "MISS"
 
 
-# Check if all battleships are hit on a grid
+# Check if all ships are hit on a grid
 def check_game_over(grid):
     for row in range(GRID_SIZE):
         for col in range(GRID_SIZE):
@@ -80,14 +91,15 @@ def check_game_over(grid):
                 return False
     return True
 
+
 # Main game loop
 running = True
 turn = 1
 game_over = False
 
-# Place battleships on player 1 and player 2 grids
-place_battleships(player1_grid)
-place_battleships(player2_grid)
+# Place ships on player 1 and player 2 grids
+place_ships(player1_grid, SHIP_LENGTHS)
+place_ships(player2_grid, SHIP_LENGTHS)
 
 while running:
     for event in pygame.event.get():
