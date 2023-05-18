@@ -294,12 +294,13 @@ while running:
                             if check_game_over(AI_grid):
                                 game_over = True
                         turn = 2
-                    elif turn == 2:
                         ai_turn(player1_grid)
-                        
                         if check_game_over(player1_grid):
                             game_over = True
                         turn = 1
+                        
+                        
+                        
 
     # Clear the window
     window.fill(BLACK)
