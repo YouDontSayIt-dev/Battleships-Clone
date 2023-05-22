@@ -39,6 +39,9 @@ AI_grid = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]
 AI_shots = []
 AI_hits = []
 
+hitflag = 0
+
+
 # Array for Player's used attacks
 Player_shots = []
 
@@ -160,36 +163,39 @@ def draw_grid(x_offset, y_offset, grid):
 
 def ai_turn(player1_grid):
     global AI_hits
-    print(AI_hits)
-    while True:
-        if len(AI_hits) == 0:
-            row = random.randint(0, GRID_SIZE - 1)
-            col = random.randint(0, GRID_SIZE - 1)
-            if (row, col) not in AI_shots:
-                print("RANDOM MODE")
-                result = check_hit(row, col, player1_grid)
-                print("AI's Attack Coordinates: ", row,col,result)
-                if result == "MISS":
-                    AI_shots.append((row, col))
-                    
-                elif result == "HIT":
-                    AI_shots.append((row, col))
-                    AI_hits.append((row, col))
-                    if check_game_over(player1_grid):
-                        game_over = True
-                        return game_over
-        else:
-            last_shot = AI_hits[-1]
-            print("SEARCH MODE")
-            row, col = search_neighboring_cells(last_shot, player1_grid)
+    
+    if len(AI_hits) == 0:
+        row = random.randint(0, GRID_SIZE - 1)
+        col = random.randint(0, GRID_SIZE - 1)
+        if (row, col) not in AI_shots:
+            print("RANDOM MODE")
             result = check_hit(row, col, player1_grid)
-            print("AI's Attack Coordinates: ", row,col,result)
-            print("CHECK", last_shot, result)
-            print(result)
-            if check_game_over(player1_grid):
-                        game_over = True
-                        return game_over
-        break
+            print("AI's Attack Coordinates: ", row, col, result)
+            if result == "MISS":
+                AI_shots.append((row, col))
+                
+            elif result == "HIT":
+                AI_shots.append((row, col))
+                AI_hits.append((row, col))
+                if check_game_over(player1_grid):
+                    game_over = True
+                    return game_over
+    else:
+        last_shot = AI_hits[-1]
+        print("SEARCH MODE")
+        row, col = search_neighboring_cells(last_shot, player1_grid)
+        result = check_hit(row, col, player1_grid)
+        if result == "MISS":
+                AI_shots.append((row, col))
+        elif result == "HIT":
+                AI_shots.append((row, col))
+                AI_hits.append((row, col))
+            
+        print("AI's Attack Coordinates: ", row, col, result)
+        if check_game_over(player1_grid):
+            game_over = True
+            return game_over
+
    
     # if (row, col) not in AI_shots:
     #         result = check_hit(row, col, player1_grid)
@@ -206,32 +212,55 @@ def ai_turn(player1_grid):
 
 def search_neighboring_cells(last_shot, player1_grid):
     print("SEARCHING")
+    global hitflag
     row, col = last_shot
-
+    dx = 0
+    dy = 0
+    
     # Define possible directions: up, down, left, right
-    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-
-    for dx, dy in directions:
-        print("DIRECTION", dx, dy)
-        new_row = row
-        new_col = col
+    # directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    negHit = -1
+    posHit = 1
+    neutral = 0
+    new_row = row
+    new_col = col
 
         # Keep moving in the current direction until an unexplored cell is found
-        while True:
-            new_row += dx
-            new_col += dy
-
-            # Check if the new coordinates are valid and unexplored
-            if is_valid_coordinate(new_row, new_col) and (new_row, new_col) not in AI_hits:
-                # If unexplored cell found, target it
-                return new_row, new_col
-
-            # If the new coordinates are invalid or already explored, change direction
-            if not is_valid_coordinate(new_row, new_col) or (new_row, new_col) in AI_hits:
-                break
-
-    # If no unexplored cells found, revert to hunt phase and select a random coordinate
-    return random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1)
+    print("hitflag: ", hitflag)
+    if hitflag == 0:
+                dx += negHit
+                dy += neutral
+    elif hitflag == 1:
+                dx += posHit
+                dy += neutral
+    elif hitflag == 2:
+                dx += neutral
+                dy += negHit
+    elif hitflag == 3:
+                dx += neutral
+                dy += posHit
+                
+    # Check if the new coordinates are valid and unexplored
+    print("BEFORE CHECKING")
+    print(new_row, new_col)
+    new_row += dx
+    new_col += dy
+    if is_valid_coordinate(new_row, new_col) and (new_row, new_col) not in AI_hits:
+    # If unexplored cell found, target it
+        print ("FOUND")
+        hitflag += 1
+        
+        
+        
+    # If the new coordinates are invalid or already explored, change direction
+    elif not is_valid_coordinate(new_row, new_col) or (new_row, new_col) in AI_hits:
+        print ("NOT FOUND")
+        hitflag = 0
+        new_row = random.randint(0, GRID_SIZE - 1)
+        new_col = random.randint(0, GRID_SIZE - 1)
+                
+    return new_row, new_col
+    
 
 
 # Function to check if the coordinate is within the grid
