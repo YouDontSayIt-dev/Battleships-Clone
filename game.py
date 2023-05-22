@@ -25,7 +25,7 @@ CELL_SIZE = WINDOW_HEIGHT // GRID_SIZE
 GAP = 10
 
 # Set the number of battleships
-SHIP_LENGTHS = [2,3]
+SHIP_LENGTHS = [5]
 
 # Create the window
 window = pygame.display.set_mode(WINDOW_SIZE)
@@ -163,7 +163,7 @@ def draw_grid(x_offset, y_offset, grid):
 
 def ai_turn(player1_grid):
     global AI_hits
-    
+    print("AI HITS: ", AI_hits)
     if len(AI_hits) == 0:
         row = random.randint(0, GRID_SIZE - 1)
         col = random.randint(0, GRID_SIZE - 1)
@@ -224,42 +224,48 @@ def search_neighboring_cells(last_shot, player1_grid):
     neutral = 0
     new_row = row
     new_col = col
-
+    while True:
         # Keep moving in the current direction until an unexplored cell is found
-    print("hitflag: ", hitflag)
-    if hitflag == 0:
-                dx += negHit
-                dy += neutral
-    elif hitflag == 1:
-                dx += posHit
-                dy += neutral
-    elif hitflag == 2:
-                dx += neutral
-                dy += negHit
-    elif hitflag == 3:
-                dx += neutral
-                dy += posHit
-                
-    # Check if the new coordinates are valid and unexplored
-    print("BEFORE CHECKING")
-    print(new_row, new_col)
-    new_row += dx
-    new_col += dy
-    if is_valid_coordinate(new_row, new_col) and (new_row, new_col) not in AI_hits:
-    # If unexplored cell found, target it
-        print ("FOUND")
-        hitflag += 1
-        
-        
-        
-    # If the new coordinates are invalid or already explored, change direction
-    elif not is_valid_coordinate(new_row, new_col) or (new_row, new_col) in AI_hits:
-        print ("NOT FOUND")
-        hitflag = 0
-        new_row = random.randint(0, GRID_SIZE - 1)
-        new_col = random.randint(0, GRID_SIZE - 1)
-                
-    return new_row, new_col
+        print("hitflag: ", hitflag)
+        if hitflag == 0:
+                    dx += negHit
+                    dy += neutral
+        elif hitflag == 1:
+                    dx += posHit
+                    dy += neutral
+        elif hitflag == 2:
+                    dx += neutral
+                    dy += negHit
+        elif hitflag == 3:
+                    dx += neutral
+                    dy += posHit
+        else:
+            hitflag = 0
+            break
+                    
+        # Check if the new coordinates are valid and unexplored
+        print("BEFORE CHECKING")
+        print(new_row, new_col)
+        new_row += dx
+        new_col += dy
+        if is_valid_coordinate(new_row, new_col) and (new_row, new_col) not in AI_hits and (new_row, new_col) not in AI_shots:
+        # If unexplored cell found, target it
+            print ("FOUND")
+            hitflag += 1
+            return new_row, new_col
+            
+            
+        # If the new coordinates are invalid or already explored, change direction
+        elif not is_valid_coordinate(new_row, new_col) or (new_row, new_col) in AI_hits and (new_row, new_col) not in AI_shots:
+            print ("NOT FOUND")
+            hitflag = 0
+            del AI_hits[0]
+            break
+            
+            
+            
+                    
+    return random.randint(0, GRID_SIZE - 1),random.randint(0, GRID_SIZE - 1)
     
 
 
