@@ -25,7 +25,7 @@ CELL_SIZE = WINDOW_HEIGHT // GRID_SIZE
 GAP = 10
 
 # Set the number of battleships
-SHIP_LENGTHS = [5]
+SHIP_LENGTHS = [5,4,3,3,2]
 
 # Create the window
 window = pygame.display.set_mode(WINDOW_SIZE)
@@ -39,11 +39,23 @@ AI_grid = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]
 AI_shots = []
 AI_hits = []
 
+
+# Hit flag
 hitflag = 0
+
+#Turn font
+turnFont = pygame.font.Font(None, 36)
+
+#Turn counter
+turnCount = 1
+countFlag = 0
+
 
 
 # Array for Player's used attacks
 Player_shots = []
+
+
 
 # Place battleships randomly on the grids
 def place_ships_AI(grid, ship_lengths):
@@ -222,6 +234,8 @@ def search_neighboring_cells(last_shot, player1_grid):
     negHit = -1
     posHit = 1
     neutral = 0
+    superPos = 2
+    superNeg = -2
     new_row = row
     new_col = col
     while True:
@@ -239,9 +253,14 @@ def search_neighboring_cells(last_shot, player1_grid):
         elif hitflag == 3:
                     dx += neutral
                     dy += posHit
+        # elif hitflag == 4:
+        #             dx += superNeg
+        #             dy += neutral
+        # elif hitflag == 5:
+        #             dx += neutral
+        #             dy += superNeg
         else:
             hitflag = 0
-            break
                     
         # Check if the new coordinates are valid and unexplored
         print("BEFORE CHECKING")
@@ -256,7 +275,7 @@ def search_neighboring_cells(last_shot, player1_grid):
             
             
         # If the new coordinates are invalid or already explored, change direction
-        elif not is_valid_coordinate(new_row, new_col) or (new_row, new_col) in AI_hits and (new_row, new_col) not in AI_shots:
+        elif not is_valid_coordinate(new_row, new_col) or (new_row, new_col) in AI_hits and (new_row, new_col) in AI_shots:
             print ("NOT FOUND")
             hitflag = 0
             del AI_hits[0]
@@ -304,6 +323,12 @@ place_ships(player1_grid, SHIP_LENGTHS)
 place_ships_AI(AI_grid, SHIP_LENGTHS)
 
 while running:
+    
+    # Render the turn count text
+    text = turnFont.render("Turn: {}".format(turnCount), True, (255, 255, 255))
+    text_rect = text.get_rect()
+    text_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -318,7 +343,6 @@ while running:
             #     clicked_col = mouse_pos[0] // CELL_SIZE
             # else:
             if clicked_row >= 0 and clicked_row < ATTACK_SIZE and clicked_col >= 0 and clicked_col < ATTACK_SIZE:
-                    if turn == 1:
                         turn_label = font.render("PLAYER 1 TURN", True, WHITE)
                         print(clicked_row, clicked_col)
                         clicked_col -= ATTACK_SIZE
@@ -328,13 +352,9 @@ while running:
                         if result == "HIT":
                             if check_game_over(AI_grid):
                                 game_over = True
-                        turn = 2
                         ai_turn(player1_grid)
                         if check_game_over(player1_grid):
-                            game_over = True
-                        turn = 1
-                        
-                        
+                            game_over = True           
                         
 
     # Clear the window
@@ -348,6 +368,9 @@ while running:
 
     # Draw grid labels
     font = pygame.font.Font(None, 36)
+    
+    # Draw the turn count text
+    window.blit(text, text_rect)
 
     # Draw game over message
     if game_over:
@@ -357,9 +380,11 @@ while running:
             game_over_label = font.render("PLAYER 1 WINS", True, WHITE)
         window.blit(game_over_label, (WINDOW_WIDTH // 2 - 120, WINDOW_HEIGHT // 2 - 20))
 
+    # Increment turn count
+        
+    
     # Update the display
     pygame.display.update()
-
 # Quit the game
 pygame.quit()
 
