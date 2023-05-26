@@ -305,6 +305,8 @@ def search_neighboring_cells(last_shot, player1_grid):
         #             dy += superNeg
         else:
             hitflag = 0
+            del AI_hits[0]
+            continue
 
         # Check if the new coordinates are valid and unexplored
         print("BEFORE CHECKING")
@@ -319,6 +321,7 @@ def search_neighboring_cells(last_shot, player1_grid):
             # If unexplored cell found, target it
             print("FOUND")
             hitflag += 1
+            AI_shots.append((row, col))
             return new_row, new_col
 
         # If the new coordinates are invalid or already explored, change direction
@@ -328,8 +331,8 @@ def search_neighboring_cells(last_shot, player1_grid):
             and (new_row, new_col) in AI_shots
         ):
             print("NOT FOUND")
-            hitflag = 0
-            del AI_hits[0]
+            hitflag += 1
+            AI_shots.append((row, col))
             break
 
     return random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1)
