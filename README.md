@@ -7,6 +7,7 @@ Written in Java language, Battleships will take inspiration from the famous boar
 ## BRANCH DESCRIPTION
 This is the update branch of the repository, the consolidated code will be submitted here before pushing to the main branch
 
+
 ## DEVELOPERS:
 | Name  | Role |
 | ------------- | ------------- |
