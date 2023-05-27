@@ -20,7 +20,7 @@ def place_ships_AI(grid, ship_lengths):
                 col = random.randint(0, GRID_SIZE - length)
                 if all(grid[row][col + i] == 0 for i in range(length)):
                     for i in range(length):
-                        grid[row][col + i] = 4  # Set player's battleship value to 4
+                        grid[row][col + i] = 4  # Set player's battleship value to 4CK  
                     placed = True
             else:
                 row = random.randint(0, GRID_SIZE - length)
@@ -36,16 +36,13 @@ def place_ships(grid, ship_lengths):
     for length in ship_lengths:
         placed = False
         blink = False  # Toggle variable for blinking effect
+        invalid_placement = False  # Flag to indicate invalid placement
         while not placed:
-
             # Clear the window
-            window.fill(BLACK)
+            window.fill(VIOLET)
 
             # Draw player 1 grid
             draw_grid(0, 0, player1_grid)
-
-            # Update the display
-            pygame.display.update()
 
             # Get the mouse position
             mouse_pos = pygame.mouse.get_pos()
@@ -55,7 +52,7 @@ def place_ships(grid, ship_lengths):
             col = mouse_pos[0] // CELL_SIZE
 
             # Toggle the blink variable
-            if pygame.time.get_ticks() % 1000 < 500:
+            if pygame.time.get_ticks() % 250 < 125:
                 blink = True
             else:
                 blink = False
@@ -90,7 +87,7 @@ def place_ships(grid, ship_lengths):
                     if blink:
                         pygame.draw.rect(
                             window,
-                            GRAY,
+                            MUSTARD,
                             (
                                 (col + i) * CELL_SIZE,
                                 row * CELL_SIZE,
@@ -102,7 +99,7 @@ def place_ships(grid, ship_lengths):
                     if blink:
                         pygame.draw.rect(
                             window,
-                            GRAY,
+                            MUSTARD,
                             (
                                 col * CELL_SIZE,
                                 (row + i) * CELL_SIZE,
@@ -110,13 +107,21 @@ def place_ships(grid, ship_lengths):
                                 CELL_SIZE,
                             ),
                         )
-            pygame.display.update()
 
             # Draw ship length label
-            font = pygame.font.Font(None, 24)
-            length_label = font.render("Ship Length: " + str(length), True, WHITE)
-            window.blit(length_label, (543, WINDOW_HEIGHT - 50))
+            font = pygame.font.SysFont('Impact', 15)
+            length_label = font.render("S H I P   L E N G H T : " + str(length), True, PINK)
+            window.blit(length_label, (535, WINDOW_HEIGHT - 125))
 
+            # Draw invalid placement message
+            if invalid_placement:
+                invalid_label = font.render(
+                    "Invalid placement. Try again.", True, WHITE
+                )
+                window.blit(invalid_label, (510, WINDOW_HEIGHT - 70))
+
+            # Update the display
+            pygame.display.update()
 
             # Check for mouse click events
             for event in pygame.event.get():
@@ -142,8 +147,9 @@ def place_ships(grid, ship_lengths):
 
                         placed = True
                     else:
-                        print("Invalid ship placement. Please try again.")
+                        invalid_placement = True  # Set the flag to indicate invalid placement
 
                 elif event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
+

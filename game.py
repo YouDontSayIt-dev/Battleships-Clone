@@ -78,7 +78,7 @@ while running:
             ):
                 turn_label = font.render("PLAYER 1 TURN", True, WHITE)
                 print(clicked_row, clicked_col)
-                clicked_col -= ATTACK_SIZE
+                #clicked_col -= ATTACK_SIZE
                 result = check_hit(clicked_row, clicked_col, AI_grid)
                 print("Player's Attack Coordinates: ", clicked_row, clicked_col, result)
                 Player_shots.append((clicked_row, clicked_col))
@@ -92,10 +92,10 @@ while running:
                 turnCount += 1
 
     # Clear the window
-    window.fill(BLACK)
+    window.fill(VIOLET)
 
     # Draw the header
-    pygame.draw.rect(window, BLACK, (0, 0, WINDOW_WIDTH, HEADER_HEIGHT))
+    pygame.draw.rect(window, VIOLET, (0, 0, WINDOW_WIDTH, HEADER_HEIGHT))
     window.blit(text, text_rect)
 
     # Draw player 1 grid
