@@ -37,16 +37,12 @@ def place_ships(grid, ship_lengths):
         placed = False
         blink = False  # Toggle variable for blinking effect
         while not placed:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()
 
             # Clear the window
             window.fill(BLACK)
 
             # Draw player 1 grid
-            boardSettings.draw_grid(0, 0, player1_grid)
+            draw_grid(0, 0, player1_grid)
 
             # Update the display
             pygame.display.update()
@@ -118,8 +114,9 @@ def place_ships(grid, ship_lengths):
 
             # Draw ship length label
             font = pygame.font.Font(None, 24)
-            length_label = font.render("Length: " + str(length), True, WHITE)
-            window.blit(length_label, (10, WINDOW_HEIGHT - 30))
+            length_label = font.render("Ship Length: " + str(length), True, WHITE)
+            window.blit(length_label, (543, WINDOW_HEIGHT - 50))
+
 
             # Check for mouse click events
             for event in pygame.event.get():
@@ -146,3 +143,7 @@ def place_ships(grid, ship_lengths):
                         placed = True
                     else:
                         print("Invalid ship placement. Please try again.")
+
+                elif event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
