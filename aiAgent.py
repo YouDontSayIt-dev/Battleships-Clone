@@ -23,6 +23,8 @@ def ai_turn(player1_grid):
             
 
         elif result == "HIT":
+            packed_item = (row,col)
+            AI_shots.remove(packed_item)
             AI_hits.append((row, col))
             if gameLogic.check_game_over(player1_grid):
                 game_over = True
@@ -32,13 +34,7 @@ def ai_turn(player1_grid):
         print("\t\tSEARCH MODE")
         row, col = search_neighboring_cells(last_shot, player1_grid)
         result = gameLogic.check_hit(row, col, player1_grid)
-        if result == "MISS":
-            packed_item = (row,col)
-            AI_shots.remove(packed_item)
-        elif result == "HIT":
-            packed_item = (row,col)
-            print(packed_item)
-            AI_shots.remove(packed_item)
+        if result == "HIT":
             AI_hits.append((row, col))
 
         if gameLogic.check_game_over(player1_grid):
@@ -112,19 +108,23 @@ def search_neighboring_cells(last_shot, player1_grid):
             # If unexplored cell found, target it
             print("\t\tDIRECTION CELL")
             hitflag += 1
+            packed_item = (new_row,new_col)
+            AI_shots.remove(packed_item)
             return new_row, new_col
 
         # If the new coordinates are invalid or already explored, change direction
         elif (
             not is_valid_coordinate(new_row, new_col)
             or (new_row, new_col) in AI_hits
-            and (new_row, new_col) in AI_shots
+            and (new_row, new_col) not in AI_shots
         ):
             print("\t\tRANDOM CELL")
             hitflag += 1
             random_choice = random.sample(AI_shots, len(AI_shots))
             print("Random Choice: ", random_choice)
             new_row, new_col = random_choice[0]
+            packed_item = (new_row,new_col)
+            AI_shots.remove(packed_item)
             break
 
     return new_row, new_col
