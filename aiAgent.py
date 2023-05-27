@@ -5,37 +5,42 @@ import gameLogic
 from globalVariables import *
 from boardSettings import *
 
+packed_item = ()
+
 def ai_turn(player1_grid):
     global AI_hits
-    print("AI HITS: ", AI_hits)
+    print("AI SHOTS: ", AI_shots)
     if len(AI_hits) == 0:
-        row = random.randint(0, GRID_SIZE - 1)
-        col = random.randint(0, GRID_SIZE - 1)
-        if (row, col) not in AI_shots:
-            print("RANDOM MODE")
-            result = gameLogic.check_hit(row, col, player1_grid)
-            print("AI's Attack Coordinates: ", row, col, result)
-            if result == "MISS":
-                AI_shots.append((row, col))
+        print("\t\tRANDOM MODE")
+        random_choice = random.sample(AI_shots, len(AI_shots))
+        print("Random Choice: ", random_choice)
+        row, col = random_choice[0]
+        
+        result = gameLogic.check_hit(row, col, player1_grid)
+        if result == "MISS":
+            packed_item = (row,col)
+            AI_shots.remove(packed_item)
+            
 
-            elif result == "HIT":
-                AI_shots.append((row, col))
-                AI_hits.append((row, col))
-                if gameLogic.check_game_over(player1_grid):
-                    game_over = True
-                    return game_over
+        elif result == "HIT":
+            AI_hits.append((row, col))
+            if gameLogic.check_game_over(player1_grid):
+                game_over = True
+                return game_over
     else:
         last_shot = AI_hits[-1]
-        print("SEARCH MODE")
+        print("\t\tSEARCH MODE")
         row, col = search_neighboring_cells(last_shot, player1_grid)
         result = gameLogic.check_hit(row, col, player1_grid)
         if result == "MISS":
-            AI_shots.append((row, col))
+            packed_item = (row,col)
+            AI_shots.remove(packed_item)
         elif result == "HIT":
-            AI_shots.append((row, col))
+            packed_item = (row,col)
+            print(packed_item)
+            AI_shots.remove(packed_item)
             AI_hits.append((row, col))
 
-        print("AI's Attack Coordinates: ", row, col, result)
         if gameLogic.check_game_over(player1_grid):
             game_over = True
             return game_over
@@ -72,7 +77,6 @@ def search_neighboring_cells(last_shot, player1_grid):
     new_col = col
     while True:
         # Keep moving in the current direction until an unexplored cell is found
-        print("hitflag: ", hitflag)
         if hitflag == 0:
             dx += negHit
             dy += neutral
@@ -97,19 +101,17 @@ def search_neighboring_cells(last_shot, player1_grid):
             continue
 
         # Check if the new coordinates are valid and unexplored
-        print("BEFORE CHECKING")
         print(new_row, new_col)
         new_row += dx
         new_col += dy
         if (
             is_valid_coordinate(new_row, new_col)
             and (new_row, new_col) not in AI_hits
-            and (new_row, new_col) not in AI_shots
+            and (new_row, new_col) in AI_shots
         ):
             # If unexplored cell found, target it
-            print("FOUND")
+            print("\t\tDIRECTION CELL")
             hitflag += 1
-            AI_shots.append((row, col))
             return new_row, new_col
 
         # If the new coordinates are invalid or already explored, change direction
@@ -118,12 +120,14 @@ def search_neighboring_cells(last_shot, player1_grid):
             or (new_row, new_col) in AI_hits
             and (new_row, new_col) in AI_shots
         ):
-            print("NOT FOUND")
+            print("\t\tRANDOM CELL")
             hitflag += 1
-            AI_shots.append((row, col))
+            random_choice = random.sample(AI_shots, len(AI_shots))
+            print("Random Choice: ", random_choice)
+            new_row, new_col = random_choice[0]
             break
 
-    return random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1)
+    return new_row, new_col
 
 
 # Function to check if the coordinate is within the grid
