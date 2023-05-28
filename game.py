@@ -113,7 +113,7 @@ while running:
                             pygame.mixer.music.set_volume(0.5)
                             game_over = True
 
-                    pygame.time.wait(500)
+                    pygame.time.wait(50)
                     aiAgent.ai_turn(player1_grid)
                     if check_game_over(player1_grid):
                         pygame.mixer.music.stop()
