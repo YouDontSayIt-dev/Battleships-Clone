@@ -62,8 +62,7 @@ while running:
                 mouse_pos_0 -= GAP
 
             clicked_row = mouse_pos_1 // CELL_SIZE
-            clicked_col = mouse_pos_0 // CELL_SIZE - GRID_SIZE
-
+            clicked_col = mouse_pos_0 // CELL_SIZE
             # if (clicked_row, clicked_col) in Player_shots:
             #     print("You already shot here")
             #     mouse_pos = pygame.mouse.get_pos()
@@ -78,7 +77,7 @@ while running:
             ):
                 turn_label = font.render("PLAYER 1 TURN", True, WHITE)
                 print(clicked_row, clicked_col)
-                #clicked_col -= ATTACK_SIZE
+                clicked_col -= ATTACK_SIZE
                 result = check_hit(clicked_row, clicked_col, AI_grid)
                 print("Player's Attack Coordinates: ", clicked_row, clicked_col, result)
                 Player_shots.append((clicked_row, clicked_col))
