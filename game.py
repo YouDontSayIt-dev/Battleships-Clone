@@ -63,32 +63,38 @@ while running:
 
             clicked_row = mouse_pos_1 // CELL_SIZE
             clicked_col = mouse_pos_0 // CELL_SIZE
-            # if (clicked_row, clicked_col) in Player_shots:
-            #     print("You already shot here")
-            #     mouse_pos = pygame.mouse.get_pos()
-            #     clicked_row = mouse_pos[1] // CELL_SIZE
-            #     clicked_col = mouse_pos[0] // CELL_SIZE
-            # else:
-            if (
-                clicked_row >= 0
-                and clicked_row < ATTACK_SIZE
-                and clicked_col >= 0
-                and clicked_col < ATTACK_SIZE
-            ):
-                turn_label = font.render("PLAYER 1 TURN", True, WHITE)
-                print(clicked_row, clicked_col)
-                clicked_col -= ATTACK_SIZE
-                result = check_hit(clicked_row, clicked_col, AI_grid)
-                print("Player's Attack Coordinates: ", clicked_row, clicked_col, result)
-                Player_shots.append((clicked_row, clicked_col))
-                if result == "HIT":
-                    if check_game_over(AI_grid):
+            modified_col = clicked_col - 10
+            print(clicked_row, clicked_col, modified_col)
+            if (clicked_row, modified_col) not in Player_shots:
+                print("You already shot here")
+                mouse_pos = pygame.mouse.get_pos()
+                clicked_row = mouse_pos[1] // CELL_SIZE
+                clicked_col = mouse_pos[0] // CELL_SIZE
+            else:
+                playerPacked = (clicked_row, modified_col)
+                Player_shots.remove(playerPacked)
+                if (
+                    clicked_row >= 0
+                    and clicked_row < ATTACK_SIZE
+                    and clicked_col >= 0
+                    and clicked_col < ATTACK_SIZE
+                ):
+                    turn_label = font.render("PLAYER 1 TURN", True, WHITE)
+                    print(clicked_col)
+                    clicked_col -= ATTACK_SIZE
+                    print(clicked_row, clicked_col)
+                    result = check_hit(clicked_row, clicked_col, AI_grid)
+                    print("Player's Attack Coordinates: ", clicked_row, clicked_col, result)
+                    Player_shots.append((clicked_row, clicked_col))
+                    print("Player's Shots: ", Player_shots)
+                    if result == "HIT":
+                        if check_game_over(AI_grid):
+                            game_over = True
+                    aiAgent.ai_turn(player1_grid)
+                    if check_game_over(player1_grid):
                         game_over = True
-                aiAgent.ai_turn(player1_grid)
-                if check_game_over(player1_grid):
-                    game_over = True
-                # Increment the turn count
-                turnCount += 1
+                    # Increment the turn count
+                    turnCount += 1
 
     # Clear the window
     window.fill(VIOLET)
