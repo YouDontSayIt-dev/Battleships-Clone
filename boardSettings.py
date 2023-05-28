@@ -48,8 +48,7 @@ def draw_grid(x_offset, y_offset, grid):
             # Draw the cell
             pygame.draw.rect(window, BLUE, (x, y, CELL_SIZE, CELL_SIZE))
 
-            # Draw the grid lines
-            pygame.draw.rect(window, WHITE, (x, y, CELL_SIZE, CELL_SIZE), 1)
+            
 
             # Draw different colors based on the grid value
             if grid[row][col] == 2:
@@ -57,4 +56,9 @@ def draw_grid(x_offset, y_offset, grid):
             elif grid[row][col] == 3:
                 pygame.draw.rect(window, DARKRED, (x, y, CELL_SIZE, CELL_SIZE)) #missed
             elif grid[row][col] == 4:
-                pygame.draw.rect(window, (BROWN), (x, y, CELL_SIZE, CELL_SIZE)) #once the ship is placed
+                pygame.draw.rect(window, BROWN, (x, y, CELL_SIZE, CELL_SIZE)) #once the ship is placed
+            elif grid[row][col] == 5:
+                pygame.draw.rect(window, BLUE, (x, y, CELL_SIZE, CELL_SIZE)) #AI ships
+
+            # Draw the grid lines
+            pygame.draw.rect(window, WHITE, (x, y, CELL_SIZE, CELL_SIZE), 1) 

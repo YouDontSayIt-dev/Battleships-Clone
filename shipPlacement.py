@@ -24,14 +24,14 @@ def place_ships_AI(grid, ship_lengths):
                 col = random.randint(0, GRID_SIZE - length)
                 if all(grid[row][col + i] == 0 for i in range(length)):
                     for i in range(length):
-                        grid[row][col + i] = 4  # Set player's battleship value to 4CK  
+                        grid[row][col + i] = 5  # Set player's battleship value to 5
                     placed = True
             else:
                 row = random.randint(0, GRID_SIZE - length)
                 col = random.randint(0, GRID_SIZE - 1)
                 if all(grid[row + i][col] == 0 for i in range(length)):
                     for i in range(length):
-                        grid[row + i][col] = 4  # Set player's battleship value to 4
+                        grid[row + i][col] = 5  # Set player's battleship value to 5
                     placed = True
 
 
