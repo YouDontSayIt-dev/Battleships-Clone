@@ -51,4 +51,7 @@ hit_shot = pygame.mixer.Sound("./assets/sfx/hit.wav")
 
 # Background Music
 intro_bgm = ("./assets/bgm/intro.wav")
+placement_bgm = ("./assets/bgm/placement.wav")
 battle_bgm = ("./assets/bgm/battle.wav")
+victory_bgm = ("./assets/bgm/victory.wav")
+defeat_bgm = ("./assets/bgm/defeat.wav")

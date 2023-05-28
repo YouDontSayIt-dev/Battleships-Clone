@@ -107,11 +107,19 @@ while running:
                     elif result == "HIT":
                         hit_shot.play()
                         if check_game_over(AI_grid):
+                            pygame.mixer.music.stop()
+                            victory = pygame.mixer.music.load(victory_bgm)
+                            pygame.mixer.music.play(-1)
+                            pygame.mixer.music.set_volume(0.5)
                             game_over = True
 
                     pygame.time.wait(500)
                     aiAgent.ai_turn(player1_grid)
                     if check_game_over(player1_grid):
+                        pygame.mixer.music.stop()
+                        victory = pygame.mixer.music.load(defeat_bgm)
+                        pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(0.5)
                         game_over = True
                     # Increment the turn count
                     turnCount += 1
@@ -140,6 +148,7 @@ while running:
         if check_game_over(player1_grid):
             game_over_label = font.render("AI Wins", True, WHITE)
         else:
+            
             game_over_label = font.render("PLAYER 1 WINS", True, WHITE)
         window.blit(game_over_label, (WINDOW_WIDTH // 2 - 120, WINDOW_HEIGHT // 2 - 20))
     
