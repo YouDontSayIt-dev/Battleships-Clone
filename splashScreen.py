@@ -16,54 +16,43 @@ def main_menu():
     show_commands()
     wait_for_input()
 
-
 def splash_screen():
-    # Clear the screen with a solid color
-    window.fill((43,80,112))
-    pygame.display.update()
+    # Load the splash screen image
+    splash_image = pygame.image.load('splash_image.png')
+    splash_rect = splash_image.get_rect()
 
+    # Resize the image to fit the window size
+    splash_image = pygame.transform.scale(splash_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
+
+    # Blit the splash screen image onto the window surface
+    window.blit(splash_image, splash_rect)
+
+    # Update the display
+    pygame.display.update()
 
 def show_commands():
     global play_rect, quit_rect  # Declare the variables as global
 
     # Display the commands on the screen
-    header_font = pygame.font.Font(None, 30)
-    title_font = pygame.font.Font('freesansbold.ttf', 90)
-    commands_font = pygame.font.Font(None, 40)
-    sub_font = pygame.font.SysFont('Verdana', 13)
+    commands_font = pygame.font.Font(None, 65)
 
-    header_text = header_font.render("WELCOME ABOARD!", True, (LIGHTB))
-    header_rect = header_text.get_rect()
-    header_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80)
-    window.blit(header_text, header_rect)
-
-    title_text = title_font.render("BATTLESHIPS", True, (232,187,149))
-    title_rect = title_text.get_rect()
-    title_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 20)
-    window.blit(title_text, title_rect)
-
-    play_text = commands_font.render("Play", True, DARKPINK)
+    play_text = commands_font.render("PLAY", True, (209, 174, 157))
     play_rect = play_text.get_rect()
-    play_rect.center = (WINDOW_WIDTH // 2 - 60, WINDOW_HEIGHT // 2 + 70)
+    play_rect.center = (WINDOW_WIDTH // 2 - 80, WINDOW_HEIGHT // 2 + 60)
     window.blit(play_text, play_rect)
 
-    quit_text = commands_font.render("Quit", True, DARKPINK)
+    quit_text = commands_font.render("QUIT", True, (209, 174, 157))
     quit_rect = quit_text.get_rect()
-    quit_rect.center = (WINDOW_WIDTH // 2 + 60, WINDOW_HEIGHT // 2 + 70)
+    quit_rect.center = (WINDOW_WIDTH // 2 + 80, WINDOW_HEIGHT // 2 + 60)
     window.blit(quit_text, quit_rect)
-
-    sub_text = sub_font.render("cruz mamorno muyco", True, CREAM)
-    sub_rect = sub_text.get_rect()
-    sub_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 160)
-    window.blit(sub_text, sub_rect)
 
     # Check if the mouse is hovering over the play or quit text
     mouse_pos = pygame.mouse.get_pos()
     if play_rect.collidepoint(mouse_pos):
-        play_text = commands_font.render("Play", True, GREEN)
+        play_text = commands_font.render("PLAY", True, (242, 103, 31))
         window.blit(play_text, play_rect)
     if quit_rect.collidepoint(mouse_pos):
-        quit_text = commands_font.render("Quit", True, RED)
+        quit_text = commands_font.render("QUIT", True, RED)
         window.blit(quit_text, quit_rect)
 
     pygame.display.update()
