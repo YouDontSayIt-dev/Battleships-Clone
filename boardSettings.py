@@ -1,4 +1,5 @@
 import pygame
+import sys
 
 # Set the dimensions of the window
 WINDOW_WIDTH = 800
@@ -39,7 +40,7 @@ window = pygame.display.set_mode(WINDOW_SIZE)
 
 
 # Draw the grid
-def draw_grid(x_offset, y_offset, grid):
+def draw_grid(x_offset, y_offset, grid, hide_ships):
     for row in range(GRID_SIZE):
         for col in range(GRID_SIZE):
             x = x_offset + col * CELL_SIZE
@@ -52,9 +53,26 @@ def draw_grid(x_offset, y_offset, grid):
             pygame.draw.rect(window, WHITE, (x, y, CELL_SIZE, CELL_SIZE), 1)
 
             # Draw different colors based on the grid value
-            if grid[row][col] == 2:
-                pygame.draw.rect(window, MUSTARD, (x, y, CELL_SIZE, CELL_SIZE)) #initial color of the ship
-            elif grid[row][col] == 3:
-                pygame.draw.rect(window, DARKRED, (x, y, CELL_SIZE, CELL_SIZE)) #missed
-            elif grid[row][col] == 4:
-                pygame.draw.rect(window, (BROWN), (x, y, CELL_SIZE, CELL_SIZE)) #once the ship is placed
+            if grid[row][col] == 3:
+                pygame.draw.rect(window, DARKRED, (x, y, CELL_SIZE, CELL_SIZE))  # missed
+            elif hide_ships and grid[row][col] == 2:
+                pygame.draw.rect(window, BLUE, (x, y, CELL_SIZE, CELL_SIZE))  # hide the ship
+
+# Game loop
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # Clear the window
+    window.fill(VIOLET)
+
+    # Drawing player 1 grid
+    draw_grid(0, 0, player1_grid, False)
+
+    # Drawing AI grid (hidden from player 1 and hiding ships)
+    draw_grid(WINDOW_WIDTH // 2, 0, AI_grid, True)
+
+    # Update the display
+    pygame.display.update()
