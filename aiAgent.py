@@ -10,21 +10,19 @@ packed_item = ()
 def ai_turn(player1_grid):
     global AI_hits
     print("AI SHOTS: ", AI_shots)
-    distant_shooting_sound.play()
     if len(AI_hits) == 0:
         print("\t\tRANDOM MODE")
         random_choice = random.sample(AI_shots, len(AI_shots))
         print("Random Choice: ", random_choice)
         row, col = random_choice[0]
+        
         result = gameLogic.check_hit(row, col, player1_grid)
         if result == "MISS":
-            missed_shot.play()
             packed_item = (row,col)
             AI_shots.remove(packed_item)
             
 
         elif result == "HIT":
-            hit_shot.play()
             packed_item = (row,col)
             AI_shots.remove(packed_item)
             AI_hits.append((row, col))
@@ -36,11 +34,7 @@ def ai_turn(player1_grid):
         print("\t\tSEARCH MODE")
         row, col = search_neighboring_cells(last_shot, player1_grid)
         result = gameLogic.check_hit(row, col, player1_grid)
-        if result == "MISS":
-            missed_shot.play()
-
-        elif result == "HIT":
-            hit_shot.play()
+        if result == "HIT":
             AI_hits.append((row, col))
 
         if gameLogic.check_game_over(player1_grid):

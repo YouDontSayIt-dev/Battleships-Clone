@@ -46,7 +46,6 @@ pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.5)
 
 while running:
-    
 
     # So that the music doesn't start immediately
     
