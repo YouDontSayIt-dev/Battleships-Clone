@@ -91,10 +91,10 @@ while running:
                 turnCount += 1
 
     # Clear the window
-    window.fill(BLACK)
+    window.fill(VIOLET)
 
     # Draw the header
-    pygame.draw.rect(window, BLACK, (0, 0, WINDOW_WIDTH, HEADER_HEIGHT))
+    pygame.draw.rect(window, VIOLET, (0, 0, WINDOW_WIDTH, HEADER_HEIGHT))
     window.blit(text, text_rect)
 
     # Draw player 1 grid
