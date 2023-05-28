@@ -41,6 +41,12 @@ def place_ships(grid, ship_lengths):
             # Clear the window
             window.fill(VIOLET)
 
+            # Load the instruction image
+            instruction_image = pygame.image.load('instruction.png')
+
+            # Blit the instruction image onto the window surface
+            window.blit(instruction_image, (402, -65))
+
             # Draw player 1 grid
             draw_grid(0, 0, player1_grid)
 
@@ -111,14 +117,14 @@ def place_ships(grid, ship_lengths):
             # Draw ship length label
             font = pygame.font.SysFont('Impact', 15)
             length_label = font.render("S H I P   L E N G H T : " + str(length), True, PINK)
-            window.blit(length_label, (535, WINDOW_HEIGHT - 110))
+            window.blit(length_label, (535, WINDOW_HEIGHT - 95))
 
             # Draw invalid placement message
             if invalid_placement:
                 invalid_label = font.render(
                     "Invalid placement!! Try again.", True, (255,78,78)
                 )
-                window.blit(invalid_label, (510, WINDOW_HEIGHT - 70))
+                window.blit(invalid_label, (510, WINDOW_HEIGHT - 50))
 
             # Update the display
             pygame.display.update()
@@ -153,3 +159,15 @@ def place_ships(grid, ship_lengths):
                     pygame.quit()
                     exit()
 
+def restart_game():
+    global player1_grid, AI_grid, turnCount, game_over
+
+    # Reset game state
+    player1_grid = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]
+    AI_grid = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]
+    turnCount = 1
+    game_over = False
+
+    # Manually place ships on player 1 and player 2 grids
+    place_ships(player1_grid, SHIP_LENGTHS)
+    place_ships_AI(AI_grid, SHIP_LENGTHS)

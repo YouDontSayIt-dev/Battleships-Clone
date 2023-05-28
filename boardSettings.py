@@ -21,6 +21,7 @@ ORANGE = (248,164,136) #instruction title
 PINK = (235,175,175) #Ship length label
 DARKPINK = (230,132,128) #Commands
 BROWND = (106,68,50) #subinstruction
+
 # Set the size of the grids
 GRID_SIZE = 10
 ATTACK_SIZE = 20
@@ -57,9 +58,3 @@ def draw_grid(x_offset, y_offset, grid):
                 pygame.draw.rect(window, DARKRED, (x, y, CELL_SIZE, CELL_SIZE)) #missed
             elif grid[row][col] == 4:
                 pygame.draw.rect(window, (BROWN), (x, y, CELL_SIZE, CELL_SIZE)) #once the ship is placed
-
-        # Load the instruction image
-        instruction_image = pygame.image.load('instruction.png')
-
-        # Blit the instruction image onto the window surface
-        window.blit(instruction_image, (x_offset + GRID_SIZE * CELL_SIZE + 2, y_offset + GRID_SIZE * CELL_SIZE - 483))
