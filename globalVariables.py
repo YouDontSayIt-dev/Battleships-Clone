@@ -1,6 +1,10 @@
+import pygame
+
 # Turn counter
 turnCount = 1
 countFlag = 0
+
+pygame.mixer.init()
 
 # Array for AI's used attacks
 AI_shots = [
@@ -38,3 +42,9 @@ Player_shots = [
 
 # Header Height
 HEADER_HEIGHT = 60
+
+# Shooting SFX
+shooting_sound = pygame.mixer.Sound("./assets/sfx/cannon.wav")
+missed_shot = pygame.mixer.Sound("./assets/sfx/splash.wav")
+distant_shooting_sound = pygame.mixer.Sound("./assets/sfx/distant-cannon.wav")
+hit_shot = pygame.mixer.Sound("./assets/sfx/hit.wav")

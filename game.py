@@ -14,6 +14,7 @@ from shipPlacement import *
 
 # Initialize Pygame
 pygame.init()
+pygame.mixer.init()
 
 # Turn font
 turnFont = pygame.font.Font(None, 36)
@@ -73,6 +74,7 @@ while running:
             else:
                 playerPacked = (clicked_row, modified_col)
                 Player_shots.remove(playerPacked)
+                shooting_sound.play()
                 if (
                     clicked_row >= 0
                     and clicked_row < ATTACK_SIZE
@@ -87,9 +89,15 @@ while running:
                     print("Player's Attack Coordinates: ", clicked_row, clicked_col, result)
                     Player_shots.append((clicked_row, clicked_col))
                     print("Player's Shots: ", Player_shots)
-                    if result == "HIT":
+                    if result == "MISS":
+                        missed_shot.play()
+                        
+                    elif result == "HIT":
+                        hit_shot.play()
                         if check_game_over(AI_grid):
                             game_over = True
+
+                    pygame.time.wait(500)
                     aiAgent.ai_turn(player1_grid)
                     if check_game_over(player1_grid):
                         game_over = True
