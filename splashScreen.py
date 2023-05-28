@@ -2,6 +2,13 @@
 import pygame
 
 from boardSettings import *
+from globalVariables import *
+
+pygame.mixer.init()
+
+intro = pygame.mixer.music.load(intro_bgm)
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.5)
 
 
 def main_menu():

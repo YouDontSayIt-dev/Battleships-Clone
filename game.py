@@ -1,5 +1,6 @@
 # Module imports
 import pygame
+import os
 
 # File imports
 import boardSettings
@@ -25,7 +26,7 @@ quit_rect = None
 
 # Call the main menu function to start the game
 splashScreen.main_menu()
-
+pygame.mixer.music.stop()
 # Main game loop
 running = True
 turnCount = 1
@@ -39,7 +40,17 @@ shipPlacement.place_ships_AI(AI_grid, SHIP_LENGTHS)
 # Header Height
 pygame.display.set_mode((WINDOW_WIDTH + GAP, WINDOW_HEIGHT + HEADER_HEIGHT))
 
+# Game BGM
+battle = pygame.mixer.music.load(battle_bgm)
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.5)
+
 while running:
+    
+
+    # So that the music doesn't start immediately
+    
+    # pygame.time.Clock().tick(10)
 
     # Render the turn count text
     text = turnFont.render("Turn: {}".format(turnCount), True, (255, 255, 255))
@@ -74,13 +85,14 @@ while running:
             else:
                 playerPacked = (clicked_row, modified_col)
                 Player_shots.remove(playerPacked)
-                shooting_sound.play()
+                
                 if (
                     clicked_row >= 0
                     and clicked_row < ATTACK_SIZE
                     and clicked_col >= 0
                     and clicked_col < ATTACK_SIZE
                 ):
+                    shooting_sound.play()
                     turn_label = font.render("PLAYER 1 TURN", True, WHITE)
                     print(clicked_col)
                     clicked_col -= ATTACK_SIZE

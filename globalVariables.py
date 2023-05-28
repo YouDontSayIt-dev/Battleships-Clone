@@ -48,3 +48,7 @@ shooting_sound = pygame.mixer.Sound("./assets/sfx/cannon.wav")
 missed_shot = pygame.mixer.Sound("./assets/sfx/splash.wav")
 distant_shooting_sound = pygame.mixer.Sound("./assets/sfx/distant-cannon.wav")
 hit_shot = pygame.mixer.Sound("./assets/sfx/hit.wav")
+
+# Background Music
+intro_bgm = ("./assets/bgm/intro.wav")
+battle_bgm = ("./assets/bgm/battle.wav")
