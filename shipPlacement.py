@@ -111,12 +111,12 @@ def place_ships(grid, ship_lengths):
             # Draw ship length label
             font = pygame.font.SysFont('Impact', 15)
             length_label = font.render("S H I P   L E N G H T : " + str(length), True, PINK)
-            window.blit(length_label, (535, WINDOW_HEIGHT - 125))
+            window.blit(length_label, (535, WINDOW_HEIGHT - 110))
 
             # Draw invalid placement message
             if invalid_placement:
                 invalid_label = font.render(
-                    "Invalid placement. Try again.", True, WHITE
+                    "Invalid placement!! Try again.", True, (255,78,78)
                 )
                 window.blit(invalid_label, (510, WINDOW_HEIGHT - 70))
 
