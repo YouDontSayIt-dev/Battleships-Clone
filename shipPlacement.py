@@ -166,16 +166,3 @@ def place_ships(grid, ship_lengths):
                 elif event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
-
-def restart_game():
-    global player1_grid, AI_grid, turnCount, game_over
-
-    # Reset game state
-    player1_grid = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]
-    AI_grid = [[0] * GRID_SIZE for _ in range(GRID_SIZE)]
-    turnCount = 0
-    game_over = False
-
-    # Manually place ships on player 1 and player 2 grids
-    place_ships(player1_grid, SHIP_LENGTHS)
-    place_ships_AI(AI_grid, SHIP_LENGTHS)

@@ -22,3 +22,4 @@ def check_game_over(grid):
                 return False
             
     return True
+
