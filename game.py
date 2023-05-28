@@ -74,14 +74,14 @@ while running:
                 mouse_pos_0 -= GAP
 
             clicked_row = mouse_pos_1 // CELL_SIZE
-            clicked_col = mouse_pos_0 // CELL_SIZE
-            modified_col = clicked_col - 10
-            print(clicked_row, clicked_col, modified_col)
+            clicked_col = mouse_pos_0 // CELL_SIZE - GRID_SIZE
+            modified_col = clicked_col + GRID_SIZE
+            print(clicked_row, modified_col)
             if (clicked_row, modified_col) not in Player_shots:
-                print("You already shot here")
+                print("Invalid Shot")
                 mouse_pos = pygame.mouse.get_pos()
                 clicked_row = mouse_pos[1] // CELL_SIZE
-                clicked_col = mouse_pos[0] // CELL_SIZE
+                clicked_col = mouse_pos[0] // CELL_SIZE 
             else:
                 playerPacked = (clicked_row, modified_col)
                 Player_shots.remove(playerPacked)
@@ -95,7 +95,7 @@ while running:
                     shooting_sound.play()
                     turn_label = font.render("PLAYER 1 TURN", True, WHITE)
                     print(clicked_col)
-                    clicked_col -= ATTACK_SIZE
+                    # clicked_col -= ATTACK_SIZE
                     print(clicked_row, clicked_col)
                     result = check_hit(clicked_row, clicked_col, AI_grid)
                     print("Player's Attack Coordinates: ", clicked_row, clicked_col, result)
