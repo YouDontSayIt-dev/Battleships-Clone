@@ -29,7 +29,7 @@ splashScreen.main_menu()
 pygame.mixer.music.stop()
 # Main game loop
 running = True
-turnCount = 1
+turnCount = 0
 game_over = False
 
 # Place ships on player 1 and player 2 grids
@@ -46,7 +46,6 @@ pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.5)
 
 while running:
-    
 
     # So that the music doesn't start immediately
     
