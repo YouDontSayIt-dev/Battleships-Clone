@@ -17,25 +17,13 @@ from shipPlacement import *
 pygame.init()
 pygame.mixer.init()
 
-# Turn font
-turnFont = pygame.font.Font(None, 36)
-
-# Global variables for text rectangles
-play_rect = None
-quit_rect = None
-
 # Call the main menu function to start the game
 splashScreen.main_menu()
 pygame.mixer.music.stop()
-# Main game loop
-running = True
-turnCount = 0
-game_over = False
 
 # Place ships on player 1 and player 2 grids
 shipPlacement.place_ships(player1_grid, SHIP_LENGTHS)
 shipPlacement.place_ships_AI(AI_grid, SHIP_LENGTHS)
-
 
 # Header Height
 pygame.display.set_mode((WINDOW_WIDTH + GAP, WINDOW_HEIGHT + HEADER_HEIGHT))
@@ -46,10 +34,6 @@ pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.5)
 
 while running:
-
-    # So that the music doesn't start immediately
-    
-    # pygame.time.Clock().tick(10)
 
     # Render the turn count text
     text = turnFont.render("Turn: {}".format(turnCount), True, (255, 255, 255))

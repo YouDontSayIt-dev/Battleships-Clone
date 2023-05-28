@@ -1,10 +1,21 @@
 import pygame
+pygame.mixer.init()
 
-# Turn counter
-turnCount = 1
+
+# Count Flag
 countFlag = 0
 
-pygame.mixer.init()
+# Global variables for text rectangles
+play_rect = None
+quit_rect = None
+
+# Main game loop
+running = True
+turnCount = 0
+game_over = False
+
+# Turn font
+turnFont = pygame.font.Font(None, 36)
 
 # Array for AI's used attacks
 AI_shots = [
