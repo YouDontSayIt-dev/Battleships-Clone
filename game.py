@@ -1,5 +1,6 @@
 # Module imports
 import pygame
+import os
 
 # File imports
 import boardSettings
@@ -14,6 +15,7 @@ from shipPlacement import *
 
 # Initialize Pygame
 pygame.init()
+pygame.mixer.init()
 
 # Turn font
 turnFont = pygame.font.Font(None, 36)
@@ -24,7 +26,7 @@ quit_rect = None
 
 # Call the main menu function to start the game
 splashScreen.main_menu()
-
+pygame.mixer.music.stop()
 # Main game loop
 running = True
 turnCount = 1
@@ -38,7 +40,17 @@ shipPlacement.place_ships_AI(AI_grid, SHIP_LENGTHS)
 # Header Height
 pygame.display.set_mode((WINDOW_WIDTH + GAP, WINDOW_HEIGHT + HEADER_HEIGHT))
 
+# Game BGM
+battle = pygame.mixer.music.load(battle_bgm)
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.5)
+
 while running:
+    
+
+    # So that the music doesn't start immediately
+    
+    # pygame.time.Clock().tick(10)
 
     # Render the turn count text
     text = turnFont.render("Turn: {}".format(turnCount), True, (255, 255, 255))
@@ -63,32 +75,54 @@ while running:
 
             clicked_row = mouse_pos_1 // CELL_SIZE
             clicked_col = mouse_pos_0 // CELL_SIZE
-            # if (clicked_row, clicked_col) in Player_shots:
-            #     print("You already shot here")
-            #     mouse_pos = pygame.mouse.get_pos()
-            #     clicked_row = mouse_pos[1] // CELL_SIZE
-            #     clicked_col = mouse_pos[0] // CELL_SIZE
-            # else:
-            if (
-                clicked_row >= 0
-                and clicked_row < ATTACK_SIZE
-                and clicked_col >= 0
-                and clicked_col < ATTACK_SIZE
-            ):
-                turn_label = font.render("PLAYER 1 TURN", True, WHITE)
-                print(clicked_row, clicked_col)
-                clicked_col -= ATTACK_SIZE
-                result = check_hit(clicked_row, clicked_col, AI_grid)
-                print("Player's Attack Coordinates: ", clicked_row, clicked_col, result)
-                Player_shots.append((clicked_row, clicked_col))
-                if result == "HIT":
-                    if check_game_over(AI_grid):
+            modified_col = clicked_col - 10
+            print(clicked_row, clicked_col, modified_col)
+            if (clicked_row, modified_col) not in Player_shots:
+                print("You already shot here")
+                mouse_pos = pygame.mouse.get_pos()
+                clicked_row = mouse_pos[1] // CELL_SIZE
+                clicked_col = mouse_pos[0] // CELL_SIZE
+            else:
+                playerPacked = (clicked_row, modified_col)
+                Player_shots.remove(playerPacked)
+                
+                if (
+                    clicked_row >= 0
+                    and clicked_row < ATTACK_SIZE
+                    and clicked_col >= 0
+                    and clicked_col < ATTACK_SIZE
+                ):
+                    shooting_sound.play()
+                    turn_label = font.render("PLAYER 1 TURN", True, WHITE)
+                    print(clicked_col)
+                    clicked_col -= ATTACK_SIZE
+                    print(clicked_row, clicked_col)
+                    result = check_hit(clicked_row, clicked_col, AI_grid)
+                    print("Player's Attack Coordinates: ", clicked_row, clicked_col, result)
+                    Player_shots.append((clicked_row, clicked_col))
+                    print("Player's Shots: ", Player_shots)
+                    if result == "MISS":
+                        missed_shot.play()
+                        
+                    elif result == "HIT":
+                        hit_shot.play()
+                        if check_game_over(AI_grid):
+                            pygame.mixer.music.stop()
+                            victory = pygame.mixer.music.load(victory_bgm)
+                            pygame.mixer.music.play(-1)
+                            pygame.mixer.music.set_volume(0.5)
+                            game_over = True
+
+                    pygame.time.wait(500)
+                    aiAgent.ai_turn(player1_grid)
+                    if check_game_over(player1_grid):
+                        pygame.mixer.music.stop()
+                        victory = pygame.mixer.music.load(defeat_bgm)
+                        pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(0.5)
                         game_over = True
-                aiAgent.ai_turn(player1_grid)
-                if check_game_over(player1_grid):
-                    game_over = True
-                # Increment the turn count
-                turnCount += 1
+                    # Increment the turn count
+                    turnCount += 1
 
     # Clear the window
     window.fill(VIOLET)
@@ -114,6 +148,7 @@ while running:
         if check_game_over(player1_grid):
             game_over_label = font.render("AI Wins", True, WHITE)
         else:
+            
             game_over_label = font.render("PLAYER 1 WINS", True, WHITE)
         window.blit(game_over_label, (WINDOW_WIDTH // 2 - 120, WINDOW_HEIGHT // 2 - 20))
     

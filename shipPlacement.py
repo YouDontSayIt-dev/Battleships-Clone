@@ -1,8 +1,12 @@
 import pygame
 import random
 
-import boardSettings
+from globalVariables import *
 from boardSettings import *
+
+pygame.mixer.init()
+
+
 
 # Set the number of battleships
 SHIP_LENGTHS = [5, 4, 3, 3, 2]
@@ -33,6 +37,10 @@ def place_ships_AI(grid, ship_lengths):
 
 # Place battleships manually on the grids
 def place_ships(grid, ship_lengths):
+    
+    placement = pygame.mixer.music.load(placement_bgm)
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.5)
     for length in ship_lengths:
         placed = False
         blink = False  # Toggle variable for blinking effect
