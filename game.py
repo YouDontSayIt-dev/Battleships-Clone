@@ -129,11 +129,23 @@ while running:
     # Draw game over message
     if game_over:
         if check_game_over(player1_grid):
-            game_over_label = font.render("AI Wins", True, WHITE)
+            game_over_message = "AI Wins"
+            game_over_rect = pygame.Rect(0, 0, WINDOW_WIDTH, HEADER_HEIGHT)
+            game_over_rect.center = (WINDOW_WIDTH // 2, HEADER_HEIGHT // 2)
+            game_over_label = font.render(game_over_message, True, WHITE)
+            game_over_label_rect = game_over_label.get_rect()
+            game_over_label_rect.center = game_over_rect.center
+            pygame.draw.rect(window, VIOLET, game_over_rect)
+            window.blit(game_over_label, game_over_label_rect)
         else:
-            
-            game_over_label = font.render("PLAYER 1 WINS", True, WHITE)
-        window.blit(game_over_label, (WINDOW_WIDTH // 2 - 120, WINDOW_HEIGHT // 2 - 20))
+            game_over_message = "PLAYER 1 WINS"
+            game_over_rect = pygame.Rect(0, 0, WINDOW_WIDTH, HEADER_HEIGHT)
+            game_over_rect.center = (WINDOW_WIDTH // 2, HEADER_HEIGHT // 2)
+            game_over_label = font.render(game_over_message, True, WHITE)
+            game_over_label_rect = game_over_label.get_rect()
+            game_over_label_rect.center = game_over_rect.center
+            pygame.draw.rect(window, VIOLET, game_over_rect)
+            window.blit(game_over_label, game_over_label_rect)
     
     #Update the game display
     pygame.display.update()

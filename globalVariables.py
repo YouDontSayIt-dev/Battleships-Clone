@@ -1,5 +1,6 @@
 import pygame
 pygame.mixer.init()
+pygame.init()
 
 
 # Count Flag

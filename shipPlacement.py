@@ -14,6 +14,10 @@ SHIP_LENGTHS = [5, 4, 3, 3, 2]
 pygame.display.set_caption("Battleship Game")
 
 # Place battleships randomly on the grids
+import random
+
+GRID_SIZE = 10
+
 def place_ships_AI(grid, ship_lengths):
     for length in ship_lengths:
         placed = False
@@ -22,17 +26,34 @@ def place_ships_AI(grid, ship_lengths):
             if orientation == 0:
                 row = random.randint(0, GRID_SIZE - 1)
                 col = random.randint(0, GRID_SIZE - length)
-                if all(grid[row][col + i] == 0 for i in range(length)):
+                valid_position = True
+                for i in range(length):
+                    if grid[row][col + i] != 0 or (row > 0 and grid[row - 1][col + i] != 0) or \
+                       (row < GRID_SIZE - 1 and grid[row + 1][col + i] != 0) or \
+                       (col + i > 0 and grid[row][col + i - 1] != 0) or \
+                       (col + i < GRID_SIZE - 1 and grid[row][col + i + 1] != 0):
+                        valid_position = False
+                        break
+                if valid_position:
                     for i in range(length):
                         grid[row][col + i] = 5  # Set player's battleship value to 5
                     placed = True
             else:
                 row = random.randint(0, GRID_SIZE - length)
                 col = random.randint(0, GRID_SIZE - 1)
-                if all(grid[row + i][col] == 0 for i in range(length)):
+                valid_position = True
+                for i in range(length):
+                    if grid[row + i][col] != 0 or (row + i > 0 and grid[row + i - 1][col] != 0) or \
+                       (row + i < GRID_SIZE - 1 and grid[row + i + 1][col] != 0) or \
+                       (col > 0 and grid[row + i][col - 1] != 0) or \
+                       (col < GRID_SIZE - 1 and grid[row + i][col + 1] != 0):
+                        valid_position = False
+                        break
+                if valid_position:
                     for i in range(length):
                         grid[row + i][col] = 5  # Set player's battleship value to 5
                     placed = True
+
 
 
 # Place battleships manually on the grids

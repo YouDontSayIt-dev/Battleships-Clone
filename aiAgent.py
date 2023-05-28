@@ -47,19 +47,6 @@ def ai_turn(player1_grid):
             game_over = True
             return game_over
 
-    # if (row, col) not in AI_shots:
-    #         result = check_hit(row, col, player1_grid)
-    #         print(result)
-    #         if result == "MISS":
-    #             AI_shots.append((row, col))
-
-    #         elif result == "HIT":
-    #             AI_shots.append((row, col))
-    #             AI_hits.append((row, col))
-    #             if check_game_over(player1_grid):
-    #                 game_over = True
-    #                 return game_over
-
 
 def search_neighboring_cells(last_shot, player1_grid):
     print("SEARCHING")
@@ -91,12 +78,6 @@ def search_neighboring_cells(last_shot, player1_grid):
         elif hitflag == 3:
             dx += neutral
             dy += posHit
-        # elif hitflag == 4:
-        #             dx += superNeg
-        #             dy += neutral
-        # elif hitflag == 5:
-        #             dx += neutral
-        #             dy += superNeg
         else:
             hitflag = 0
             del AI_hits[0]
@@ -114,8 +95,6 @@ def search_neighboring_cells(last_shot, player1_grid):
             # If unexplored cell found, target it
             print("\t\tDIRECTION CELL")
             hitflag += 1
-            packed_item = (new_row,new_col)
-            AI_shots.remove(packed_item)
             return new_row, new_col
 
         # If the new coordinates are invalid or already explored, change direction
@@ -124,13 +103,25 @@ def search_neighboring_cells(last_shot, player1_grid):
             or (new_row, new_col) in AI_hits
             and (new_row, new_col) not in AI_shots
         ):
-            print("\t\tRANDOM CELL")
+            print("\t\OTHER SIDE CELL")
+            if hitflag == 0:
+                dx += posHit
+                dy += neutral
+            elif hitflag == 1:
+                dx += negHit
+                dy += neutral
+            elif hitflag == 2:
+                dx += neutral
+                dy += posHit
+            elif hitflag == 3:
+                dx += neutral
+                dy += negHit
+            # random_choice = random.sample(AI_shots, len(AI_shots))
+            # print("Random Choice: ", random_choice)
+            # new_row, new_col = random_choice[0]
             hitflag += 1
-            random_choice = random.sample(AI_shots, len(AI_shots))
-            print("Random Choice: ", random_choice)
-            new_row, new_col = random_choice[0]
-            packed_item = (new_row,new_col)
-            AI_shots.remove(packed_item)
+            new_row += dx
+            new_col += dy
             break
 
     return new_row, new_col
