@@ -1,4 +1,4 @@
-grid_size = 10
+grid_size = 20
 
 # Generate the list of coordinates
 coordinates = []
