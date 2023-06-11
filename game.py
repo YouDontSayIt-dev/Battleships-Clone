@@ -33,6 +33,20 @@ battle = pygame.mixer.music.load(battle_bgm)
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.5)
 
+	# Define restart_game() function
+def restart_game():
+    # Reset game variables here
+    global game_over
+    game_over = False
+    # Add any other necessary variable resets
+    
+    # Call functions to reset game state
+    shipPlacement.place_ships(player1_grid, SHIP_LENGTHS)
+    shipPlacement.place_ships_AI(AI_grid, SHIP_LENGTHS)
+    
+    # Play the game background music again
+    pygame.mixer.music.play(-1)
+
 while running:
 
     # Render the turn count text
@@ -126,7 +140,7 @@ while running:
     # Draw the turn count text
     window.blit(text, text_rect)
 
-    # Draw game over message
+    # Draw game over message and restart button
     if game_over:
         if check_game_over(player1_grid):
             game_over_message = "AI Wins"
@@ -146,6 +160,23 @@ while running:
             game_over_label_rect.center = game_over_rect.center
             pygame.draw.rect(window, VIOLET, game_over_rect)
             window.blit(game_over_label, game_over_label_rect)
+	        
+        # Restart button
+        restart_button_rect = pygame.Rect(0, 0, 100, 50)  # Define the restart button rectangle
+        restart_button_rect.center = (WINDOW_WIDTH // 2, HEADER_HEIGHT // 2 + 60)  # Position the button
+        
+        pygame.draw.rect(window, GREEN, restart_button_rect)  # Draw the button rectangle
+        restart_label = font.render("Restart", True, WHITE)  # Create the label text
+        restart_label_rect = restart_label.get_rect()
+        restart_label_rect.center = restart_button_rect.center
+        window.blit(restart_label, restart_label_rect)  # Draw the label text
+        
+        # Check if the restart button is clicked
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if restart_button_rect.collidepoint(mouse_pos):
+                    restart_game()  # Call the restart_game() function to restart the game
     
     #Update the game display
     pygame.display.update()
