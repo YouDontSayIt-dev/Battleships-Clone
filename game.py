@@ -33,6 +33,32 @@ battle = pygame.mixer.music.load(battle_bgm)
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.5)
 
+	# Define restart_game() function
+def restart_game():
+ 
+    # Reset game variables here
+    global game_over,Player_shots, turnCount
+    game_over = False
+    Player_shots = []
+    turnCount = 1
+   
+    # Clear the player1_grid
+    for row in range(GRID_SIZE):
+        for col in range(GRID_SIZE):
+            player1_grid[row][col] = 0
+
+    # Clear the AI_grid
+    for row in range(GRID_SIZE):
+        for col in range(GRID_SIZE):
+                AI_grid[row][col] = 0  
+    
+    # Call functions to reset game state
+    shipPlacement.place_ships(player1_grid, SHIP_LENGTHS)
+    shipPlacement.place_ships_AI(AI_grid, SHIP_LENGTHS)
+    
+    # Play the game background music again
+    pygame.mixer.music.play(-1)
+
 while running:
 
     # Render the turn count text
@@ -126,7 +152,7 @@ while running:
     # Draw the turn count text
     window.blit(text, text_rect)
 
-    # Draw game over message
+    # Draw game over message and restart button
     if game_over:
         if check_game_over(player1_grid):
             game_over_message = "AI Wins"
@@ -146,7 +172,61 @@ while running:
             game_over_label_rect.center = game_over_rect.center
             pygame.draw.rect(window, VIOLET, game_over_rect)
             window.blit(game_over_label, game_over_label_rect)
-    
+	        
+        # Restart button
+        continue_button_rect = pygame.Rect(0, 0, 400, 400)  # Define the restart button rectangle
+        continue_button_rect.center = (WINDOW_WIDTH // 2, HEADER_HEIGHT // 2 + 60)  # Position the button
+        
+        pygame.draw.rect(window, VIOLET, continue_button_rect)  # Draw the button rectangle
+        continue_label = font.render("Would You like to Continue?", True, WHITE)  # Create the label text
+        continue_label_rect = continue_label.get_rect()
+        continue_label_rect.center = continue_button_rect.center
+        window.blit(continue_label, continue_label_rect)  # Draw the label text
+
+         # Create the "Yes" and "No" buttons
+        button_width, button_height = 80, 50
+        button_padding = 20
+
+         # Create the "Yes" and "No" buttons
+        yes_button_rect = pygame.Rect(continue_button_rect.left + button_padding,
+        continue_button_rect.bottom - button_height - button_padding,button_width,button_height)
+        no_button_rect = pygame.Rect(continue_button_rect.right - button_width - button_padding,
+            continue_button_rect.bottom - button_height - button_padding,button_width,button_height)
+        
+            # Check if the mouse is hovering over the button and update the button color accordingly
+        mouse_pos = pygame.mouse.get_pos()
+        if yes_button_rect.collidepoint(mouse_pos):
+                pygame.draw.rect(window, (122,55,139), yes_button_rect)
+        else:
+                pygame.draw.rect(window, (VIOLET), yes_button_rect)
+        if no_button_rect.collidepoint(mouse_pos):
+                pygame.draw.rect(window, (122,55,139), no_button_rect)
+        else:
+                pygame.draw.rect(window, (VIOLET), no_button_rect)
+        
+            # Render and draw the "Yes" and "No" button labels
+        yes_label = font.render("Yes", True, WHITE)
+        no_label = font.render("No", True, WHITE)
+        yes_label_rect = yes_label.get_rect()
+        no_label_rect = no_label.get_rect()
+
+        # Position the "Yes" and "No" button labels
+        yes_label_rect.center = (yes_button_rect.left + button_width // 2, yes_button_rect.centery)
+        no_label_rect.center = (no_button_rect.left + button_width // 2, no_button_rect.centery)
+
+        # Draw the "Yes" and "No" button labels
+        window.blit(yes_label, yes_label_rect)
+        window.blit(no_label, no_label_rect)
+        
+        # Check if the yes button is clicked
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if yes_button_rect.collidepoint(mouse_pos):
+                    restart_game()  # Call the restart_game() function to restart the game
+                elif no_button_rect.collidepoint(mouse_pos):
+                    pygame.quit()  # Call pygame.quit() to exit the game
+
     #Update the game display
     pygame.display.update()
 
